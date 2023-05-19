@@ -2,6 +2,8 @@ import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { Loader } from "./";
+import { TransactionContext } from "../context/TransactionContext";
+import { useContext } from "react";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => {
   return (
@@ -18,11 +20,25 @@ const Input = ({ placeholder, name, type, value, handleChange }) => {
 };
 
 const WelcomeComponent = () => {
+  const {
+    connectWallet,
+    currentAccount,
+    handleChange,
+    formData,
+    sendTransaction,
+  } = useContext(TransactionContext);
   const companyCommonStyles =
     "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
-  const connectWallet = () => {};
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    console.log(formData);
+    const { addressTo, amount, keyword, message } = formData;
+    if (!addressTo || !amount || !keyword || !message)
+      return alert("Please fill out all information");
+    e.preventDefault();
+    sendTransaction();
+  };
+
   return (
     <div className="flex w-full justify-center items-center">
       <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
@@ -34,13 +50,17 @@ const WelcomeComponent = () => {
             Explore the crypto world. Buy and sell crypto-currencies easily on
             Krypto
           </p>
-          <button
-            type="button"
-            onClick={connectWallet}
-            className="w-full flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-          >
-            <p className="text-white text-base font-semibold">Connect Wallet</p>
-          </button>
+          {!currentAccount && (
+            <button
+              type="button"
+              onClick={connectWallet}
+              className="w-full flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+                Connect Wallet
+              </p>
+            </button>
+          )}
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
             <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
               Reliability
@@ -78,25 +98,25 @@ const WelcomeComponent = () => {
               placeholder="Address To"
               name="addressTo"
               type="text"
-              handleChange={() => {}}
+              handleChange={handleChange}
             />
             <Input
               placeholder="Amount (ETH)"
               name="amount"
               type="number"
-              handleChange={() => {}}
+              handleChange={handleChange}
             />
             <Input
               placeholder="Keyword (Gif)"
               name="keyword"
               type="text"
-              handleChange={() => {}}
+              handleChange={handleChange}
             />
             <Input
               placeholder="Enter Message"
               name="message"
               type="text"
-              handleChange={() => {}}
+              handleChange={handleChange}
             />
             <div className="h=[1px] w-full bg-gray-400 my-2" />
             {false ? (
