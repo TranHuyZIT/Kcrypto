@@ -73,10 +73,11 @@ export const TransactionProvider = ({ children }) => {
             from: currentAccount,
             to: addressTo,
             gas: "0x5208", // 2100 WEI
-            value: parseEther(amount),
+            value: parseEther(amount).toString(),
           },
         ],
       });
+      console.log("Comfirmed!");
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parseEther(amount),
